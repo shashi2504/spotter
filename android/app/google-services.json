@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "958426916248",
+    "firebase_url": "https://slot-availability-system-default-rtdb.firebaseio.com",
+    "project_id": "slot-availability-system",
+    "storage_bucket": "slot-availability-system.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:958426916248:android:164935286173542d1377ed",
+        "android_client_info": {
+          "package_name": "com.example.testing"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFzWw4Vvq39HZxxY5aPq6J-4a7sYRqb8s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
