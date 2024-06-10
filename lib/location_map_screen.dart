@@ -6,6 +6,8 @@ import 'package:testing/bookmark_screen.dart';
 import 'chargingstation_details.dart';
 import 'dart:math' as math;
 import 'trips_screen.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 final logger = Logger();
 
@@ -20,12 +22,20 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
   late GoogleMapController mapController;
   LocationData? currentLocation;
   List<ChargingStation> chargingStations = [
-    ChargingStation("Charging Station1", const LatLng(10.8977847, 76.8951039)),
-    ChargingStation("Charging Station2", const LatLng(10.9151433, 76.9486759)),
-    ChargingStation("Charging Station3", const LatLng(10.9901585, 76.9188049)),
-    ChargingStation("Charging Station4", const LatLng(10.9614884, 76.9861954)),
-    ChargingStation("Charging Station5", const LatLng(10.9502784, 76.9534152)),
-    ChargingStation("Charging Station6", const LatLng(10.9281852, 76.9499038)),
+    ChargingStation("AB-II Model X", const LatLng(10.9041707, 76.898001)),
+    ChargingStation("VMB Model C1", const LatLng(10.901449, 76.905746)),
+    ChargingStation(
+        "Ettimadai Charging Station", const LatLng(10.8977847, 76.8951039)),
+    ChargingStation(
+        "Madukkarai Easy Charge Station", const LatLng(10.9151433, 76.9486759)),
+    ChargingStation(
+        "PowerUp Plus Station: Model X", const LatLng(10.9901585, 76.9188049)),
+    ChargingStation(
+        "ChargeHub Elite: Model 3", const LatLng(10.9614884, 76.9861954)),
+    ChargingStation(
+        "SwiftCharge Pro: Model Y2", const LatLng(10.9502784, 76.9534152)),
+    ChargingStation(
+        "TurboCharge Station: Model B2", const LatLng(10.9281852, 76.9499038)),
   ];
 
   final LatLng _center = const LatLng(10.9039982, 76.8980172);
@@ -106,25 +116,28 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
       ),
       onTap: () {
         _onChargingStationTapped(
-            title, "VVXW+429 Ettimadai Tamil Nadu", "CCS/SAE");
+            title, "VVXW+429 Ettimadai Tamil Nadu", "CCS-2");
       },
     );
   }
 
   Set<Marker> _createMarkers() {
     return {
-      if (currentLocation != null)
-        Marker(
-          markerId: const MarkerId("currentLocation"),
-          position:
-              LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
-          infoWindow: const InfoWindow(
-            title: "Your Location",
-          ),
-          onTap: () {
-            logger.d("Marker tapped");
-          },
-        ),
+      // Remove the condition that creates the marker for the current location
+      // if (currentLocation != null)
+      //   Marker(
+      //     markerId: const MarkerId("currentLocation"),
+      //     position:
+      //         LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
+      //     icon:
+      //         BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+      //     infoWindow: const InfoWindow(
+      //       title: "Your Location",
+      //     ),
+      //     onTap: () {
+      //       logger.d("Marker tapped");
+      //     },
+      //   ),
       for (var station in chargingStations)
         _createChargingStationMarker(
           station.name,
@@ -136,7 +149,7 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
   }
 
   List<ChargingStation> _getNearbyChargingStations() {
-    const double maxDistance = 5.0; // Define the maximum distance in kilometers
+    const double maxDistance = 5.0;
     List<ChargingStation> nearbyStations = [];
 
     for (var station in chargingStations) {
@@ -214,23 +227,67 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
     );
   }
 
-  void _showRoute(LatLng destination) {
-    setState(() {
-      polylines.clear();
-    });
-    Polyline route = Polyline(
-      polylineId: const PolylineId("route"),
-      color: Colors.blue,
-      width: 5,
-      points: [
-        LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
-        destination,
-      ],
-    );
+  void _showRoute(LatLng destination) async {
+    final String apiUrl =
+        'https://maps.googleapis.com/maps/api/directions/json?origin=${currentLocation!.latitude},${currentLocation!.longitude}&destination=${destination.latitude},${destination.longitude}&key=AIzaSyBbjaaUUg-tTrnnofIz2zdHSg5_DEmrdE0';
 
-    setState(() {
-      polylines.add(route);
-    });
+    final response = await http.get(Uri.parse(apiUrl));
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      List<LatLng> routeCoords =
+          _decodePoly(data['routes'][0]['overview_polyline']['points']);
+
+      setState(() {
+        polylines.clear();
+        polylines.add(Polyline(
+          polylineId: const PolylineId("route"),
+          color: Colors.blue,
+          width: 5,
+          points: routeCoords,
+        ));
+      });
+    } else {
+      throw Exception('Failed to load route');
+    }
+  }
+
+  List<LatLng> _decodePoly(String poly) {
+    var list = poly.codeUnits;
+    var lList = <LatLng>[];
+
+    int index = 0;
+    int len = poly.length;
+    int lat = 0, lng = 0;
+
+    while (index < len) {
+      int b, shift = 0, result = 0;
+
+      do {
+        b = list[index++] - 63;
+        result |= (b & 0x1F) << shift;
+        shift += 5;
+      } while (b >= 0x20);
+
+      int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+      lat += dlat;
+
+      shift = 0;
+      result = 0;
+
+      do {
+        b = list[index++] - 63;
+        result |= (b & 0x1F) << shift;
+        shift += 5;
+      } while (b >= 0x20);
+
+      int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+      lng += dlng;
+
+      lList.add(LatLng(lat / 1E5, lng / 1E5));
+    }
+
+    return lList;
   }
 
   void _navigateToBookmarkScreen() {

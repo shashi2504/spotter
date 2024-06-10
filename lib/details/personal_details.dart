@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-import 'package:provider/provider.dart';
-import 'package:testing/details/signup_email.dart';
+import 'package:testing/firebase_service.dart';
 import '../cardetails/add_vehicle.dart';
 
 final Logger _logger = Logger();
@@ -16,8 +15,14 @@ class PersonalDetailsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Personal Details"),
+        title: const Text(
+          "Personal Details",
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: const Color.fromARGB(143, 0, 0, 0),
+        centerTitle: true,
       ),
+      backgroundColor: const Color.fromARGB(143, 0, 0, 0),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -39,25 +44,34 @@ class PersonalDetailsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                _logger.d("Save personal details");
-
-                final userEmail = context.read<UserDataProvider>().email;
-                final userPassword = context.read<UserDataProvider>().password;
-
-                _logger.d("User Email: $userEmail");
-                _logger.d("User Password: $userPassword");
-                _logger.d("User Name: ${nameController.text}");
-                _logger.d("User Phone Number: ${phoneNumberController.text}");
-
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AddVehicleScreen(),
-                  ),
-                );
+              onPressed: () async {
+                try {
+                  await FirebaseService.savePersonalDetails(
+                    nameController.text,
+                    phoneNumberController.text,
+                  );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AddVehicleScreen(),
+                    ),
+                  );
+                } catch (e) {
+                  // Handle errors
+                  _logger.e('Error: $e');
+                  // You can show an error message to the user here
+                }
               },
-              child: const Text("Save Details"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF4CBB17),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+              child: const Text(
+                "Save Details",
+                style: TextStyle(color: Colors.black),
+              ),
             ),
           ],
         ),

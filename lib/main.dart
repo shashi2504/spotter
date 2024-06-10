@@ -7,6 +7,22 @@ import 'package:provider/provider.dart';
 import 'package:testing/details/signin_screen.dart';
 import 'details/signup_email.dart';
 
+class UserDataProvider extends ChangeNotifier {
+  late String _email;
+  late String _password;
+
+  String get email => _email;
+  String get password => _password;
+
+  void setEmailAndPassword(String email, String password) {
+    _email = email;
+    _password = password;
+    notifyListeners();
+  }
+
+  void init(String text, String text2) {}
+}
+
 final Logger _logger = Logger();
 
 Future<void> main() async {
@@ -153,11 +169,20 @@ class MainScreen extends StatelessWidget {
                 );
               },
               style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF4CBB17),
+                  backgroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular((8.0)))),
-              child: const Text("Sign up with Email",
-                  style: TextStyle(color: Colors.black)),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.email, color: Colors.black),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text("Sign up with Email",
+                      style: TextStyle(color: Colors.black)),
+                ],
+              ),
             ),
             const SizedBox(height: 10),
             Row(

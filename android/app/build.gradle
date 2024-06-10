@@ -5,6 +5,7 @@ plugins {
     id "com.google.gms.google-services"
 }
 
+def firebaseBomVersion = '32.7.0'
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
@@ -67,5 +68,7 @@ flutter {
 }
 
 dependencies {
-    implementation (platform("com.google.firebase:firebase-bom:32.7.0"))
+    implementation (platform("com.google.firebase:firebase-bom:$firebaseBomVersion"))
+    implementation "com.google.firebase:firebase-firestore"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:testing/location_map_screen.dart';
 import '../location_service.dart';
+
+final Logger _logger = Logger();
 
 class SaveDetailsScreen extends StatelessWidget {
   final String carMake;
@@ -43,15 +46,21 @@ class SaveDetailsScreen extends StatelessWidget {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
-                final locationData =
-                    await _locationService.getCurrentLocation();
-                if (locationData != null) {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const LocationMapScreen(),
-                      ));
-                } else {}
+                try {
+                  final locationData =
+                      await _locationService.getCurrentLocation();
+                  if (locationData != null) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const LocationMapScreen(),
+                        ));
+                  } else {
+                    // Hanle location errors
+                  }
+                } catch (e) {
+                  _logger.e('Error: $e');
+                }
               },
               child: const Text("ADD VEHICLE"),
             ),

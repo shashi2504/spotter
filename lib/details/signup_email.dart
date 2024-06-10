@@ -1,9 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:testing/details/personal_details.dart';
+import 'package:testing/firebase_service.dart';
+import 'package:testing/main.dart';
 
 final Logger _logger = Logger();
+
+FirebaseService firebaseService = FirebaseService();
 
 class SignUpWithEmailScreen extends StatelessWidget {
   const SignUpWithEmailScreen({super.key});
@@ -15,8 +20,14 @@ class SignUpWithEmailScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Sign Up with Email"),
+        title: const Text(
+          "Sign Up with Email",
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: const Color.fromARGB(143, 0, 0, 0),
+        centerTitle: true,
       ),
+      backgroundColor: const Color.fromARGB(143, 0, 0, 0),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -39,37 +50,47 @@ class SignUpWithEmailScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                _logger.d("Perform email sign-up");
-
-                context.read<UserDataProvider>().setEmailAndPassword(
-                      emailController.text,
-                      passwordController.text,
+              onPressed: () async {
+                bool? emailExists =
+                    await FirebaseService.isEmailExists(emailController.text);
+                emailExists ??= false;
+                if (emailExists) {
+                  _logger.e('Email already in use');
+                } else {
+                  try {
+                    await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                      email: emailController.text,
+                      password: passwordController.text,
                     );
-
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const PersonalDetailsScreen(),
-                  ),
-                );
+                    context.read<UserDataProvider>().init(
+                          emailController.text,
+                          passwordController.text,
+                        );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const PersonalDetailsScreen(),
+                      ),
+                    );
+                  } catch (e) {
+                    _logger.e('Sign-up error: $e');
+                  }
+                }
               },
-              child: const Text("Sign up"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF4CBB17),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+              child: const Text(
+                "Sign up",
+                style: TextStyle(color: Colors.black),
+              ),
             ),
           ],
         ),
       ),
     );
-  }
-}
-
-class UserDataProvider extends ChangeNotifier {
-  late String email;
-  late String password;
-
-  void setEmailAndPassword(String userEmail, String userPassword) {
-    email = userEmail;
-    password = userPassword;
-    notifyListeners();
   }
 }
