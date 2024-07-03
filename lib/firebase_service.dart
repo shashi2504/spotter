@@ -5,7 +5,6 @@ import 'user_model.dart';
 final Logger _logger = Logger();
 
 class FirebaseService {
-  // Add this method to save user personal details to Firestore
   static Future<void> savePersonalDetails(
       String name, String phoneNumber) async {
     try {

@@ -45,9 +45,7 @@ class ChargingStationDetailsScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      // Handle charger button tap
-                    },
+                    onTap: () {},
                     child: Column(
                       children: [
                         const Text('Charger'),
@@ -65,15 +63,11 @@ class ChargingStationDetailsScreen extends StatelessWidget {
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: const Text(
-                                'Location Details'), // Title of AlertDialog
+                            title: const Text('Location Details'),
                             content: Column(
-                              // Content of AlertDialog
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                // You can add mini map widget here
-                                Text(
-                                    'Location: $address'), // Display location details
+                                Text('Location: $address'),
                               ],
                             ),
                             actions: <Widget>[
@@ -88,12 +82,10 @@ class ChargingStationDetailsScreen extends StatelessWidget {
                         },
                       );
                     },
-                    child: const Text('Details'), // Text for the button
+                    child: const Text('Details'),
                   ),
                   GestureDetector(
-                    onTap: () {
-                      // Handle reviews button tap
-                    },
+                    onTap: () {},
                     child: const Text('Reviews'),
                   ),
                 ],

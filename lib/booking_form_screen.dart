@@ -75,7 +75,6 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
-            // Add booking form here
             TextFormField(
               decoration: const InputDecoration(labelText: 'Name'),
               controller: _nameController,

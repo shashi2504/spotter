@@ -57,9 +57,7 @@ class PersonalDetailsScreen extends StatelessWidget {
                     ),
                   );
                 } catch (e) {
-                  // Handle errors
                   _logger.e('Error: $e');
-                  // You can show an error message to the user here
                 }
               },
               style: ElevatedButton.styleFrom(

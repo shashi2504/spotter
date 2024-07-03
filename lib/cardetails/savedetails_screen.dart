@@ -55,9 +55,7 @@ class SaveDetailsScreen extends StatelessWidget {
                         MaterialPageRoute(
                           builder: (context) => const LocationMapScreen(),
                         ));
-                  } else {
-                    // Hanle location errors
-                  }
+                  } else {}
                 } catch (e) {
                   _logger.e('Error: $e');
                 }

@@ -5,11 +5,8 @@ import '../location_map_screen.dart';
 
 class CarModelScreen extends StatelessWidget {
   final String make;
-  final String userId; // Added userId parameter here
-  const CarModelScreen(
-      {super.key,
-      required this.make,
-      required this.userId}); // Added 'required' for userId
+  final String userId;
+  const CarModelScreen({super.key, required this.make, required this.userId});
 
   @override
   Widget build(BuildContext context) {

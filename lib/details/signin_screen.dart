@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart'; // Add this import statement
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:logger/logger.dart';
 import 'package:testing/cardetails/add_vehicle.dart';
 import 'package:testing/main.dart';
-import 'package:testing/firebase_service.dart'; // Import the FirebaseService class
+import 'package:testing/firebase_service.dart';
 
 final Logger _logger = Logger();
 
@@ -47,7 +47,6 @@ class SignInScreen extends StatelessWidget {
                 bool emailExists =
                     await FirebaseService.isEmailExists(emailController.text);
                 if (emailExists) {
-                  // Email exists, proceed with sign-in
                   try {
                     await FirebaseAuth.instance.signInWithEmailAndPassword(
                       email: emailController.text,
@@ -61,11 +60,8 @@ class SignInScreen extends StatelessWidget {
                     );
                   } catch (e) {
                     _logger.e('Sign-in error: $e');
-                    // You can show an error message to the user here
                   }
                 } else {
-                  // Email does not exist, handle accordingly
-                  // For example, show an error message
                   _logger.e('Email does not exist');
                 }
               },

@@ -123,21 +123,6 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
 
   Set<Marker> _createMarkers() {
     return {
-      // Remove the condition that creates the marker for the current location
-      // if (currentLocation != null)
-      //   Marker(
-      //     markerId: const MarkerId("currentLocation"),
-      //     position:
-      //         LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
-      //     icon:
-      //         BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
-      //     infoWindow: const InfoWindow(
-      //       title: "Your Location",
-      //     ),
-      //     onTap: () {
-      //       logger.d("Marker tapped");
-      //     },
-      //   ),
       for (var station in chargingStations)
         _createChargingStationMarker(
           station.name,

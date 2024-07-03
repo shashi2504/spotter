@@ -112,7 +112,6 @@ class _BookingConfirmationScreenState extends State<BookingConfirmationScreen> {
                     child: ElevatedButton(
                       onPressed: () {
                         if (_amountController.text.isNotEmpty) {
-                          // Open payment screen with the entered amount
                           Navigator.push(
                             context,
                             MaterialPageRoute(
