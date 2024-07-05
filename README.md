@@ -48,10 +48,10 @@ Realtime Database: Firebase Firestore for real-time updates on slot availability
 
 Setup and Installation
 Clone the Repository:
-- git clone https://github.com/your-username/charging-slot-locator.git
-- cd charging-slot-locator
-- Install Dependencies:
+- git clone https://github.com/Shashi2504/Spotter_flutter_app.git
+- cd charging-slot-locator/
 
+Install Dependencies:
 - npm install
 
 Configure Firebase:
