@@ -40,7 +40,7 @@ class _BookingConfirmationScreenState extends State<BookingConfirmationScreen> {
     super.initState();
     _blynkService = BlynkService(
       url:
-          'https://blynk.cloud/external/api/get?token=x99IQH85DwgLaTdjV2hBmTAuBOlmSDX3&V2',
+          'https://blynk.cloud/external/api/get?token=BLYNK_TOKEN_ID',
     );
     _fetchAmount();
   }
