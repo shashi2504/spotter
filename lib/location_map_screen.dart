@@ -214,7 +214,7 @@ class _LocationMapScreenState extends State<LocationMapScreen> {
 
   void _showRoute(LatLng destination) async {
     final String apiUrl =
-        'https://maps.googleapis.com/maps/api/directions/json?origin=${currentLocation!.latitude},${currentLocation!.longitude}&destination=${destination.latitude},${destination.longitude}&key=AIzaSyBbjaaUUg-tTrnnofIz2zdHSg5_DEmrdE0';
+        'https://maps.googleapis.com/maps/api/directions/json?origin=${currentLocation!.latitude},${currentLocation!.longitude}&destination=${destination.latitude},${destination.longitude}&key=YOUR_APPI_KEY';
 
     final response = await http.get(Uri.parse(apiUrl));
 
