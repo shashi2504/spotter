@@ -57,7 +57,6 @@ Users can log in and manage their profiles securely with **Firebase Authenticati
 
 ## 📸 Screenshots  
 
-_(Add some images of the app's UI here, like the home screen, map view, and payment screen.)_  
 
 ---
 
